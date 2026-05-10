@@ -745,6 +745,19 @@ function formatSSN() {
   ssnField.value = val;
 }
 
+function formatDOB() {
+  const dobField = document.getElementById("dob");
+  let val = dobField.value.replace(/\D/g, "").slice(0, 8);
+
+  if (val.length > 4) {
+    val = val.slice(0, 2) + "/" + val.slice(2, 4) + "/" + val.slice(4);
+  } else if (val.length > 2) {
+    val = val.slice(0, 2) + "/" + val.slice(2);
+  }
+
+  dobField.value = val;
+}
+
 function validateFname() {
   const value = document.getElementById("fname").value.trim();
   const regex = /^[A-Za-z'-]{1,30}$/;

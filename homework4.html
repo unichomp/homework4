@@ -180,13 +180,14 @@ NOTE:
               <td>
                 <input
                   type="text"
+                  inputmode="numeric"
                   id="dob"
                   name="dob"
                   required
                   pattern="(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d\d"
                   title="Format: MM/DD/YYYY. Must not be in the future or more than 120 years ago."
                   placeholder="MM/DD/YYYY"
-                  oninput="validateDOB()"
+                  oninput="formatDOB(); validateDOB()"
                   onblur="validateDOB()"
                 />
                 <br />
