@@ -668,6 +668,14 @@ document.addEventListener("DOMContentLoaded", () =>
   };
 });
 
+if (depressionSlider && Number(depressionSlider.value) >= 8) 
+  {
+    const newTab = window.open("MentalHealth.html", "_blank");
+    if (!newTab) {
+      alert("Please allow popups so we can show your mental health resources.");
+    }
+  }
+  
 /* added this to fetch the states from local*/
 async function loadStates() {
   try {
