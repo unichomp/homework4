@@ -653,12 +653,19 @@ document.addEventListener("DOMContentLoaded", () =>
   window.showDepressionValue = showDepressionValue;
   window.showStressValue = showStressValue;
 
-  window.onload = function () {
-  showDepressionValue();
-  showStressValue();
-  loadStates();
-  checkUser();          
-};
+  window.onload = async function () 
+  {
+    showDepressionValue();
+    showStressValue();
+    await loadStates();
+    checkUser();
+    attachStorageListeners();
+
+    if (getCookie("firstname") !== "") 
+    {
+      loadData();
+    }
+  };
 });
 
 /* added this to fetch the states from local*/
@@ -1204,4 +1211,84 @@ function saveUserCookie() {
 function rememberMeChanged() {
   saveUserCookie();
   checkUser();
+}
+
+/* Saves all non-secure fields to local storage */
+
+const STORAGE_FIELDS = [
+  "fname", "middleini", "lname", "dob",
+  "address1", "address2", "city", "state", "zip1",
+  "email", "phone1", "username",
+  "notes", "range", "depression", "stress"
+];
+
+function saveField(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    localStorage.setItem("rrc_" + id, el.value);
+  }
+}
+
+function saveRadioGroup(name) {
+  const selected = document.querySelector('input[name="' + name + '"]:checked');
+  localStorage.setItem("rrc_" + name, selected ? selected.value : "");
+}
+
+function saveCheckGroup(name) {
+  const checked = document.querySelectorAll('input[name="' + name + '"]:checked');
+  const values = [];
+  checked.forEach(c => values.push(c.value));
+  localStorage.setItem("rrc_" + name, values.join(","));
+}
+
+function loadData() {
+  STORAGE_FIELDS.forEach(id => {
+    const saved = localStorage.getItem("rrc_" + id);
+    const el = document.getElementById(id);
+    if (saved !== null && el) {
+      el.value = saved;
+    }
+  });
+
+  const sex = localStorage.getItem("rrc_psex");
+  if (sex) {
+    const radio = document.querySelector('input[name="psex"][value="' + sex + '"]');
+    if (radio) radio.checked = true;
+  }
+
+  const hist = localStorage.getItem("rrc_history");
+  if (hist) {
+    hist.split(",").forEach(value => {
+      if (!value) return;
+      const box = document.querySelector('input[name="history"][value="' + value + '"]');
+      if (box) box.checked = true;
+    });
+  }
+
+  if (typeof showDepressionValue === "function") showDepressionValue();
+  if (typeof showStressValue === "function") showStressValue();
+  const painSlider = document.getElementById("range");
+  const painOut = document.getElementById("range-slider");
+  if (painSlider && painOut) painOut.textContent = "Pain Level: " + painSlider.value + "/10";
+}
+
+function attachStorageListeners() {
+  STORAGE_FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.type === "range") {
+      el.addEventListener("input", () => saveField(id));
+    } else {
+      el.addEventListener("blur", () => saveField(id));
+      el.addEventListener("change", () => saveField(id));
+    }
+  });
+
+  document.querySelectorAll('input[name="psex"]').forEach(r => {
+    r.addEventListener("click", () => saveRadioGroup("psex"));
+  });
+
+  document.querySelectorAll('input[name="history"]').forEach(c => {
+    c.addEventListener("click", () => saveCheckGroup("history"));
+  });
 }
