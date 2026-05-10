@@ -656,7 +656,8 @@ document.addEventListener("DOMContentLoaded", () =>
   window.onload = function () {
   showDepressionValue();
   showStressValue();
-  loadStates();          
+  loadStates();
+  checkUser();          
 };
 });
 
@@ -1095,6 +1096,7 @@ function validateForm() {
   const allValid = results.every(result => result === true);
 
   if (allValid) {
+    saveUserCookie();
     showSubmitButton();
     alert("All fields look good. You may now submit the form.");
   } else {
@@ -1117,7 +1119,6 @@ function validateHistory() {
   return true;
 }
 
-
 /* PREVENTS SUBMISSION UNLESS SUCCESSFUL VALIDATION */
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("signup");
@@ -1130,3 +1131,77 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+/* ADDED a ton of new code for Cookies for assignment 4 */
+
+// Standard cookie helpers
+function setCookie(name, value, days) {
+  const date = new Date();
+  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+  const expires = "expires=" + date.toUTCString();
+  document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
+}
+
+function getCookie(name) {
+  const cookieName = name + "=";
+  const decoded = decodeURIComponent(document.cookie);
+  const parts = decoded.split(";");
+  for (let i = 0; i < parts.length; i++) {
+    let c = parts[i].trim();
+    if (c.indexOf(cookieName) === 0) {
+      return c.substring(cookieName.length);
+    }
+  }
+  return "";
+}
+
+function deleteCookie(name) {
+  document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+function checkUser() {
+  const fname = getCookie("firstname");
+  const welcomeMsg = document.getElementById("welcomeMessage");
+  const newUserSection = document.getElementById("newUserSection");
+  const fnameField = document.getElementById("fname");
+
+  if (fname !== "") {
+    welcomeMsg.innerHTML = "Welcome back, " + fname + "!";
+    newUserSection.innerHTML =
+      '<label><input type="checkbox" id="notMe" onclick="startNewUser()" /> ' +
+      'Not ' + fname + '? Click here to start as a new user.</label>';
+    if (fnameField) {
+      fnameField.value = fname;
+    }
+  } else {
+    welcomeMsg.innerHTML = "Hello new user!";
+    newUserSection.innerHTML = "";
+  }
+}
+
+function startNewUser() {
+  deleteCookie("firstname");
+  localStorage.clear();
+  const form = document.getElementById("signup");
+  if (form) form.reset();
+  location.reload();
+}
+
+function saveUserCookie() {
+  const remember = document.getElementById("rememberMe");
+  const fnameField = document.getElementById("fname");
+  if (!remember || !fnameField) return;
+
+  const fname = fnameField.value.trim();
+  if (remember.checked && fname !== "") {
+    setCookie("firstname", fname, 2); // 2 days = 48 hours
+  } else if (!remember.checked) {
+    deleteCookie("firstname");
+    localStorage.clear();
+  }
+}
+
+function rememberMeChanged() {
+  saveUserCookie();
+  checkUser();
+}

@@ -50,6 +50,11 @@ NOTE:
           </td>
         </tr>
       </table>
+      <!-- ADDED a Cookie welcome bar -->
+      <div id="welcomeBar">
+        <span id="welcomeMessage">Hello new user!</span>
+        <span id="newUserSection"></span>
+      </div>
     </header>
 
     <br /><br />
@@ -102,7 +107,7 @@ NOTE:
                   title="1 to 30 characters. Letters, apostrophes, and dashes only."
                   placeholder="Ex: John"
                   oninput="validateFname()"
-                  onblur="validateFname()"
+                  onblur="validateFname(); saveUserCookie();"
                 />
                 <br />
                 <span class="error" id="fname-error"></span>
@@ -583,7 +588,21 @@ NOTE:
                 <br /><br />
               </td>
             </tr>
-
+              <!-- ADDED a Remember Me -->
+            <tr>
+              <td class="td1"><label for="rememberMe">Remember Me</label></td>
+              <td>
+                <input
+                  type="checkbox"
+                  id="rememberMe"
+                  name="rememberMe"
+                  checked
+                  onchange="rememberMeChanged()"
+                />
+                <label for="rememberMe">Save my name and form info on this computer (48 hours).</label>
+                <br /><br />
+              </td>
+            </tr>
             <tr>
               <td class="td1" colspan="4">
                   <center>

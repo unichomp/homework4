@@ -34,7 +34,7 @@ body
   flex-direction: column;
   min-height: 100vh;
   margin: 0;
-  padding-top: 110px;
+  padding-top: 140px;
   padding-bottom: 80px;
 
   /* Softer background */
@@ -503,4 +503,27 @@ select
   font-family: var(--font-main);
   font-weight: lighter;
   margin: 0 0 14px 0;
+}
+/* THEME for the Cookie welcome bar */
+#welcomeBar {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-main);
+  font-size: 16px;
+  color: var(--accent-blue);
+  padding: 6px 10px;
+  border-top: 1px solid rgba(0, 86, 155, 0.18);
+  background: rgba(0, 86, 155, 0.06);
+  box-sizing: border-box;
+}
+
+#newUserSection {
+  margin-left: 14px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+#newUserSection input[type="checkbox"] {
+  vertical-align: middle;
+  margin-right: 4px;
 }
