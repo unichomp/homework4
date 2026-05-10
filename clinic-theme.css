@@ -34,6 +34,7 @@ body
   flex-direction: column;
   min-height: 100vh;
   margin: 0;
+  padding-bottom: 80px;
 
   /* Softer background */
   background: linear-gradient(var(--page-green), rgba(255, 255, 255, 0.25));
@@ -43,9 +44,13 @@ body
 header 
 {
   width: 100%;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.95);
   border-bottom: 4px solid var(--accent-blue-soft);
   padding: 8px 10px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-sizing: border-box;
 }
 
 /* Titles */
@@ -302,11 +307,15 @@ input[type="range"]
 /* Footer */
 footer 
 {
-  margin-top: auto;
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.95);
   border-top: 4px solid var(--accent-blue-soft);
   min-height: 3rem;
+  z-index: 1000;
+  box-sizing: border-box;
 }
 
 #endFooter 
